@@ -80,3 +80,33 @@ HAVING COUNT(pms.match_id) >= 5
 ORDER BY
     avg_rating DESC
 LIMIT 5;
+
+/*
+=========================================================
+Question 3 : Players with Most Assists
+=========================================================
+
+Purpose:
+Find the players who have provided the highest
+number of assists across all matches.
+
+Business Value:
+Highlights the tournament's best playmakers and
+chance creators.
+
+=========================================================
+*/
+
+SELECT
+    p.player_id,
+    p.player_name,
+    SUM(pms.assists) AS total_assists
+FROM players p
+JOIN player_match_stats pms
+USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name
+ORDER BY
+    total_assists DESC
+LIMIT 10;
