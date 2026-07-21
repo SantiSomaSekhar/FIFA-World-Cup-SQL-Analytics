@@ -110,3 +110,33 @@ GROUP BY
 ORDER BY
     total_assists DESC
 LIMIT 10;
+
+/*
+=========================================================
+Question 4 : Players with Highest Pass Accuracy
+=========================================================
+
+Purpose:
+Identify the players with the highest average pass
+accuracy across all matches.
+
+Business Value:
+Helps evaluate players who maintain excellent
+passing efficiency and ball distribution.
+
+=========================================================
+*/
+
+SELECT
+    p.player_id,
+    p.player_name,
+    ROUND(AVG(pms.pass_accuracy), 2) AS avg_pass_accuracy
+FROM players p
+JOIN player_match_stats pms
+USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name
+ORDER BY
+    avg_pass_accuracy DESC
+LIMIT 10;
