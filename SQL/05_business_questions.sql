@@ -47,3 +47,36 @@ GROUP BY
     p.player_name
 ORDER BY total_goals DESC
 LIMIT 10;
+
+/*
+=========================================================
+Question 2 : Top Rated Players
+=========================================================
+
+Purpose:
+Find the players with the highest average rating,
+considering only those who have played at least
+5 matches.
+
+Business Value:
+Identifies the tournament's most consistent
+high-performing players.
+
+=========================================================
+*/
+
+SELECT
+    p.player_id,
+    p.player_name,
+    ROUND(AVG(pms.player_rating), 2) AS avg_rating,
+    COUNT(pms.match_id) AS matches_played
+FROM players p
+JOIN player_match_stats pms
+USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name
+HAVING COUNT(pms.match_id) >= 5
+ORDER BY
+    avg_rating DESC
+LIMIT 5;
