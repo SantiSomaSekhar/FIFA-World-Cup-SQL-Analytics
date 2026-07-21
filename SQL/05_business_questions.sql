@@ -20,6 +20,11 @@ The queries demonstrate SQL concepts such as:
 =========================================================
 */
 /*
+#########################################################
+                PLAYER PERFORMANCE
+#########################################################
+*/
+/*
 =========================================================
 Question 1 : Top 10 Goal Scorers
 =========================================================
@@ -322,6 +327,12 @@ ORDER BY
 LIMIT 10;
 
 /*
+#########################################################
+                 TEAM PERFORMANCE
+#########################################################
+*/
+
+/*
 =========================================================
 Question 11 : Teams with Highest Average Player Rating
 =========================================================
@@ -449,6 +460,125 @@ GROUP BY
     p.team
 ORDER BY
     total_yellow_cards DESC;
+
+/*
+#########################################################
+                  MATCH ANALYSIS
+#########################################################
+*/
+
+/*
+=========================================================
+Question 16 : Stadiums Hosting the Most Matches
+=========================================================
+
+Purpose:
+Find the stadiums that hosted the highest number
+of matches.
+
+Business Value:
+Helps identify the busiest tournament venues.
+
+=========================================================
+*/
+
+SELECT
+    stadium,
+    COUNT(match_id) AS total_matches
+FROM matches
+GROUP BY stadium
+ORDER BY total_matches DESC;
+
+/*
+=========================================================
+Question 17 : Stadium with Highest Average Goals per Match
+=========================================================
+
+Purpose:
+Calculate the average number of goals scored per
+match at each stadium.
+
+Business Value:
+Identifies the most entertaining stadiums based
+on goal-scoring.
+
+=========================================================
+*/
+
+SELECT
+    stadium,
+    ROUND(AVG(goals_team + goals_opponent), 2) AS avg_goals
+FROM matches
+GROUP BY stadium
+ORDER BY avg_goals DESC;
+
+/*
+=========================================================
+Question 18 : Tournament Stages with Most Matches
+=========================================================
+
+Purpose:
+Count the number of matches played in each
+tournament stage.
+
+Business Value:
+Provides an overview of tournament structure.
+
+=========================================================
+*/
+
+SELECT
+    tournament_stage,
+    COUNT(match_id) AS total_matches
+FROM matches
+GROUP BY tournament_stage
+ORDER BY total_matches DESC;
+
+/*
+=========================================================
+Question 19 : Tournament Stages with Highest Average Goals
+=========================================================
+
+Purpose:
+Calculate the average goals scored in each
+tournament stage.
+
+Business Value:
+Identifies which stages were the most exciting.
+
+=========================================================
+*/
+
+SELECT
+    tournament_stage,
+    ROUND(AVG(goals_team + goals_opponent), 2) AS avg_goals
+FROM matches
+GROUP BY tournament_stage
+ORDER BY avg_goals DESC;
+
+/*
+=========================================================
+Question 20 : Cities Hosting the Most Matches
+=========================================================
+
+Purpose:
+Find the cities that hosted the highest number
+of matches.
+
+Business Value:
+Measures venue utilization across host cities.
+
+=========================================================
+*/
+
+SELECT
+    city,
+    COUNT(match_id) AS total_matches
+FROM matches
+GROUP BY city
+ORDER BY total_matches DESC;
+
+
 
 
 
