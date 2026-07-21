@@ -289,4 +289,167 @@ ORDER BY
     defensive_actions DESC
 LIMIT 10;
 
+/*
+=========================================================
+Question 10 : Most Consistent Players
+=========================================================
+
+Purpose:
+Identify players with the highest average performance
+score who have played at least 5 matches.
+
+Business Value:
+Highlights players who consistently perform at a
+high level throughout the tournament.
+
+=========================================================
+*/
+
+SELECT
+    p.player_id,
+    p.player_name,
+    ROUND(AVG(pms.performance_score), 2) AS avg_performance,
+    COUNT(pms.match_id) AS matches_played
+FROM players p
+JOIN player_match_stats pms
+USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name
+HAVING COUNT(pms.match_id) >= 5
+ORDER BY
+    avg_performance DESC
+LIMIT 10;
+
+/*
+=========================================================
+Question 11 : Teams with Highest Average Player Rating
+=========================================================
+
+Purpose:
+Calculate the average player rating for each team.
+
+Business Value:
+Helps compare the overall quality of team
+performances.
+
+=========================================================
+*/
+
+SELECT
+    p.team,
+    ROUND(AVG(pms.player_rating), 2) AS avg_rating
+FROM players p
+JOIN player_match_stats pms
+USING(player_id)
+GROUP BY
+    p.team
+ORDER BY
+    avg_rating DESC;
+
+/*
+=========================================================
+Question 12 : Teams Scoring the Most Goals
+=========================================================
+
+Purpose:
+Find the teams whose players scored the highest
+number of goals.
+
+Business Value:
+Measures overall attacking strength.
+
+=========================================================
+*/
+
+SELECT
+    p.team,
+    SUM(pms.goals) AS total_goals
+FROM players p
+JOIN player_match_stats pms
+USING(player_id)
+GROUP BY
+    p.team
+ORDER BY
+    total_goals DESC;
+
+/*
+=========================================================
+Question 13 : Teams with Highest Average Pass Accuracy
+=========================================================
+
+Purpose:
+Compare the passing efficiency of all teams.
+
+Business Value:
+Evaluates ball retention and passing quality.
+
+=========================================================
+*/
+
+SELECT
+    p.team,
+    ROUND(AVG(pms.pass_accuracy), 2) AS avg_pass_accuracy
+FROM players p
+JOIN player_match_stats pms
+USING(player_id)
+GROUP BY
+    p.team
+ORDER BY
+    avg_pass_accuracy DESC;
+
+/*
+=========================================================
+Question 14 : Teams with Most Assists
+=========================================================
+
+Purpose:
+Identify teams that created the highest number
+of goals through assists.
+
+Business Value:
+Measures teamwork and chance creation.
+
+=========================================================
+*/
+
+SELECT
+    p.team,
+    SUM(pms.assists) AS total_assists
+FROM players p
+JOIN player_match_stats pms
+USING(player_id)
+GROUP BY
+    p.team
+ORDER BY
+    total_assists DESC;
+
+/*
+=========================================================
+Question 15 : Teams with Most Yellow Cards
+=========================================================
+
+Purpose:
+Identify teams with the highest number of
+yellow cards.
+
+Business Value:
+Measures overall team discipline.
+
+=========================================================
+*/
+
+SELECT
+    p.team,
+    SUM(pms.yellow_cards) AS total_yellow_cards
+FROM players p
+JOIN player_match_stats pms
+USING(player_id)
+GROUP BY
+    p.team
+ORDER BY
+    total_yellow_cards DESC;
+
+
+
 
