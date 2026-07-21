@@ -1,0 +1,6 @@
+-- ==========================================
+-- FIFA World Cup SQL Analytics Project
+-- File: 01_database_setup.sql
+-- Description:
+-- Creates the database and all normalized tables.
+-- ==========================================
