@@ -140,3 +140,153 @@ GROUP BY
 ORDER BY
     avg_pass_accuracy DESC
 LIMIT 10;
+
+/*
+=========================================================
+Question 5 : Players Who Played the Most Minutes
+=========================================================
+
+Purpose:
+Find the players who have played the highest total
+number of minutes in the tournament.
+
+Business Value:
+Identifies the most trusted and frequently used
+players.
+
+=========================================================
+*/
+
+SELECT
+    p.player_id,
+    p.player_name,
+    SUM(pms.minutes_played) AS total_minutes
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name
+ORDER BY
+    total_minutes DESC
+LIMIT 10;
+
+/*
+=========================================================
+Question 6 : Players with Highest Goal Contributions
+=========================================================
+
+Purpose:
+Find players who contributed the most goals and
+assists combined.
+
+Business Value:
+Highlights players with the greatest attacking
+impact.
+
+=========================================================
+*/
+
+SELECT
+    p.player_id,
+    p.player_name,
+    SUM(pms.goals + pms.assists) AS goal_contributions
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name
+ORDER BY
+    goal_contributions DESC
+LIMIT 10;
+
+/*
+=========================================================
+Question 7 : Players with Most Yellow Cards
+=========================================================
+
+Purpose:
+Identify the players who received the highest
+number of yellow cards.
+
+Business Value:
+Helps analyze player discipline.
+
+=========================================================
+*/
+
+SELECT
+    p.player_id,
+    p.player_name,
+    SUM(pms.yellow_cards) AS total_yellow_cards
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name
+ORDER BY
+    total_yellow_cards DESC
+LIMIT 10;
+
+/*
+=========================================================
+Question 8 : Players with Most Red Cards
+=========================================================
+
+Purpose:
+Identify the players who received the highest
+number of red cards.
+
+Business Value:
+Measures disciplinary issues and player behavior.
+
+=========================================================
+*/
+
+SELECT
+    p.player_id,
+    p.player_name,
+    SUM(pms.red_cards) AS total_red_cards
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name
+ORDER BY
+    total_red_cards DESC
+LIMIT 10;
+
+/*
+=========================================================
+Question 9 : Best Defensive Players
+=========================================================
+
+Purpose:
+Find players with the highest total defensive
+actions.
+
+Business Value:
+Highlights players with strong defensive
+contributions.
+
+=========================================================
+*/
+
+SELECT
+    p.player_id,
+    p.player_name,
+    SUM(
+        pms.tackles +
+        pms.interceptions +
+        pms.clearances +
+        pms.blocks
+    ) AS defensive_actions
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name
+ORDER BY
+    defensive_actions DESC
+LIMIT 10;
+
+
