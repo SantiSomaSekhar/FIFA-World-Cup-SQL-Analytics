@@ -153,3 +153,43 @@ The project demonstrates advanced SQL features such as:
 - Git
 - GitHub
 - Power BI
+
+  ## 📊 Power BI Dashboard
+
+The SQL dataset is connected to Power BI to create an interactive dashboard for visualization and reporting.
+
+The dashboard includes:
+
+- KPI Cards
+- Team Performance
+- Top Goal Scorers
+- Player Ratings
+- Match Statistics
+- Tournament Analysis
+- Interactive Filters
+
+*(Dashboard screenshots will be added below.)*
+
+## 📸 Dashboard Preview
+
+Coming Soon...
+
+## 🚀 Future Improvements
+
+- Add more advanced SQL optimization techniques.
+- Expand Power BI dashboard with additional visuals.
+- Include stored procedures and triggers.
+- Automate data refresh using scheduled imports.
+- Deploy the project using cloud databases.
+
+  ## 👨‍💻 Author
+
+** Santennagari Soma Sekhar **
+
+Aspiring Data Analyst passionate about SQL, Power BI, Excel, and Python.
+
+GitHub:
+https://github.com/SantiSomaSekhar
+
+## ⭐ If you found this project useful, consider giving it a star.
+
