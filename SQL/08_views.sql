@@ -21,7 +21,6 @@ Provides overall player statistics across all matches.
 */
 
 CREATE VIEW vw_player_performance AS
-
 SELECT
     p.player_id,
     p.player_name,
@@ -47,7 +46,6 @@ Displays important match information.
 */
 
 CREATE VIEW vw_match_summary AS
-
 SELECT
     match_id,
     match_date,
@@ -71,7 +69,6 @@ Shows team-wise goals and average player ratings.
 */
 
 CREATE VIEW vw_team_performance AS
-
 SELECT
     p.team,
     SUM(pms.goals) AS total_goals,
@@ -91,7 +88,6 @@ Displays tournament totals for every player.
 */
 
 CREATE VIEW vw_tournament_leaders AS
-
 SELECT
     p.player_name,
     p.team,
@@ -112,7 +108,6 @@ Displays defensive statistics for every player.
 */
 
 CREATE VIEW vw_defensive_performance AS
-
 SELECT
     p.player_name,
     p.team,
@@ -138,7 +133,6 @@ Shows passing accuracy for each player.
 */
 
 CREATE VIEW vw_passing_statistics AS
-
 SELECT
     p.player_name,
     p.team,
@@ -163,7 +157,6 @@ Displays total goal contributions by player.
 */
 
 CREATE VIEW vw_goal_contributions AS
-
 SELECT
     p.player_name,
     p.team,
@@ -186,7 +179,6 @@ Displays every player's rating in every match.
 */
 
 CREATE VIEW vw_match_ratings AS
-
 SELECT
     p.player_name,
     m.match_date,
@@ -196,3 +188,68 @@ FROM player_match_stats pms
 JOIN players p USING(player_id)
 JOIN matches m USING(match_id);
 
+/*
+=========================================================
+View 9 : Tournament Summary
+=========================================================
+
+Purpose:
+Displays overall tournament statistics.
+
+=========================================================
+*/
+
+CREATE VIEW vw_tournament_summary AS
+SELECT
+    (SELECT COUNT(*) FROM players) AS total_players,
+    (SELECT COUNT(*) FROM matches) AS total_matches,
+    (SELECT SUM(goals) FROM player_match_stats) AS total_goals,
+    (SELECT SUM(assists) FROM player_match_stats) AS total_assists,
+    (SELECT ROUND(AVG(player_rating),2)
+     FROM player_match_stats) AS average_player_rating;
+
+/*
+=========================================================
+View 10 : Team Performance Summary
+=========================================================
+
+Purpose:
+Displays each team's overall tournament performance.
+
+=========================================================
+*/
+
+CREATE VIEW vw_team_performance AS
+SELECT
+    p.team,
+    COUNT(DISTINCT p.player_id) AS total_players,
+    SUM(pms.goals) AS total_goals,
+    SUM(pms.assists) AS total_assists,
+    ROUND(AVG(pms.player_rating),2) AS average_ratin
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.team;
+
+/*
+=========================================================
+END OF FILE
+
+Views Created:
+
+• Player Statistics
+• Team Statistics
+• Goal Scorers
+• Assist Leaders
+• Defensive Statistics
+• Pass Accuracy
+• Goal Contributions
+• Match Ratings
+• Tournament Summary
+• Team Performance Summary
+
+Project:
+FIFA World Cup SQL Analytics
+
+=========================================================
+*/
