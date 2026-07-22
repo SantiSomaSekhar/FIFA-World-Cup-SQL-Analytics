@@ -463,6 +463,194 @@ GROUP BY
     p.player_name,
     p.team;
 
+/*
+=========================================================
+Question 16 : Top Goal Scorer from Every Team
+=========================================================
+
+Purpose:
+Find the highest goal scorer from every team.
+
+Business Value:
+Identifies each team's primary attacking player.
+
+=========================================================
+*/
+
+WITH player_goals AS (
+    SELECT
+        p.team,
+        p.player_name,
+        SUM(pms.goals) AS total_goals,
+        RANK() OVER(
+            PARTITION BY p.team
+            ORDER BY SUM(pms.goals) DESC
+        ) AS goal_rank
+    FROM players p
+    JOIN player_match_stats pms USING(player_id)
+    GROUP BY
+        p.player_id,
+        p.player_name,
+        p.team
+)
+SELECT *
+FROM player_goals
+WHERE goal_rank = 1
+ORDER BY team;
+
+/*
+=========================================================
+Question 17 : Running Average Player Rating
+=========================================================
+
+Purpose:
+Calculate the cumulative average player rating.
+
+Business Value:
+Tracks how average ratings change across ranked players.
+
+=========================================================
+*/
+
+SELECT
+    p.player_name,
+    ROUND(AVG(pms.player_rating),2) AS avg_rating,
+    ROUND(
+        AVG(AVG(pms.player_rating))
+        OVER(
+            ORDER BY AVG(pms.player_rating)
+        ),
+    2) AS running_average
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name;
+
+/*
+=========================================================
+Question 18 : Team Goal Contribution Percentage
+=========================================================
+
+Purpose:
+Calculate each player's percentage contribution to
+their team's total goals.
+
+Business Value:
+Shows how much each player contributes to the team's
+overall scoring.
+
+=========================================================
+*/
+
+WITH team_goals AS (
+    SELECT
+        team,
+        SUM(goals) AS total_team_goals
+    FROM players p
+    JOIN player_match_stats pms USING(player_id)
+    GROUP BY team
+)
+SELECT
+    p.team,
+    p.player_name,
+    SUM(pms.goals) AS player_goals,
+    ROUND(
+        (SUM(pms.goals) / tg.total_team_goals) * 100,
+        2
+    ) AS contribution_percentage
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+JOIN team_goals tg
+ON p.team = tg.team
+GROUP BY
+    p.player_id,
+    p.player_name,
+    p.team,
+    tg.total_team_goals
+ORDER BY contribution_percentage DESC;
+
+/*
+=========================================================
+Question 19 : Best All-Round Players
+=========================================================
+
+Purpose:
+Rank players using goals, assists and player ratings.
+
+Business Value:
+Identifies complete players rather than specialists.
+
+=========================================================
+*/
+
+SELECT
+    p.player_name,
+    SUM(pms.goals) AS goals,
+    SUM(pms.assists) AS assists,
+    ROUND(AVG(pms.player_rating),2) AS avg_rating,
+    RANK() OVER(
+        ORDER BY
+            SUM(pms.goals + pms.assists) DESC,
+            AVG(pms.player_rating) DESC
+    ) AS overall_rank
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name;
+
+/*
+=========================================================
+Question 20 : Team Performance Summary
+=========================================================
+
+Purpose:
+Generate a summary of each team's overall performance.
+
+Business Value:
+Provides a dashboard-ready summary for reporting.
+
+=========================================================
+*/
+
+SELECT
+    p.team,
+    COUNT(DISTINCT p.player_id) AS total_players,
+    SUM(pms.goals) AS total_goals,
+    SUM(pms.assists) AS total_assists,
+    ROUND(AVG(pms.player_rating),2) AS average_rating,
+    ROUND(AVG(pms.pass_accuracy),2) AS average_pass_accuracy
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY p.team
+ORDER BY average_rating DESC;
+
+/*
+=========================================================
+Advanced SQL Analysis Completed
+
+Total Questions : 20
+
+Concepts Covered:
+- CTEs
+- Subqueries
+- Correlated Subqueries
+- Window Functions
+- RANK()
+- DENSE_RANK()
+- ROW_NUMBER()
+- LAG()
+- LEAD()
+- NTILE()
+- PERCENT_RANK()
+- FIRST_VALUE()
+- Analytical Queries
+
+=========================================================
+*/
+
+
 
 
 
