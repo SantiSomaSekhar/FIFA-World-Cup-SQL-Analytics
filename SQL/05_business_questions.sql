@@ -578,6 +578,26 @@ FROM matches
 GROUP BY city
 ORDER BY total_matches DESC;
 
+/*
+=========================================================
+Business Question Analysis Completed
+
+Total Business Questions : 20
+
+Topics Covered:
+- Player Analysis
+- Team Performance
+- Match Statistics
+- Goal Scoring
+- Passing Performance
+- Defensive Performance
+- Tournament Analysis
+- Stadium Analysis
+- City Analysis
+
+=========================================================
+*/
+
 
 
 
