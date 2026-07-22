@@ -551,3 +551,163 @@ SELECT
     ) AS cumulative_distribution
 FROM ratings;
 
+/*
+#########################################################
+        ADVANCED REPORTING
+#########################################################
+*/
+/*
+=========================================================
+Question 16 : Top 5 Goal Contributors
+=========================================================
+
+Purpose:
+Find players with the highest combined goals and assists.
+
+SQL Concepts:
+• CTE
+• Aggregate Functions
+
+=========================================================
+*/
+
+WITH contributions AS (
+    SELECT
+        p.player_name,
+        p.team,
+        SUM(pms.goals) AS total_goals,
+        SUM(pms.assists) AS total_assists,
+        SUM(pms.goals + pms.assists) AS goal_contributions
+    FROM players p
+    JOIN player_match_stats pms USING(player_id)
+    GROUP BY
+        p.player_id,
+        p.player_name,
+        p.team
+)
+SELECT
+    player_name,
+    team,
+    total_goals,
+    total_assists,
+    goal_contributions
+FROM contributions
+ORDER BY goal_contributions DESC
+LIMIT 5;
+
+/*
+=========================================================
+Question 17 : Most Consistent Players
+=========================================================
+
+Purpose:
+Find players with the lowest variation in match ratings.
+
+SQL Concepts:
+• STDDEV()
+
+=========================================================
+*/
+
+SELECT
+    p.player_name,
+    p.team,
+    ROUND(AVG(pms.player_rating),2) AS avg_rating,
+    ROUND(STDDEV(pms.player_rating),2) AS rating_variation
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name,
+    p.team
+HAVING COUNT(*) >= 5
+ORDER BY rating_variation ASC;
+
+/*
+=========================================================
+Question 18 : Best Passing Teams
+=========================================================
+
+Purpose:
+Find teams with the highest average pass accuracy.
+
+SQL Concepts:
+• Aggregate Functions
+
+=========================================================
+*/
+
+SELECT
+    p.team,
+    ROUND(AVG(pms.pass_accuracy),2) AS avg_pass_accuracy
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY p.team
+ORDER BY avg_pass_accuracy DESC;
+
+/*
+=========================================================
+Question 19 : Highest Rated Tournament Stages
+=========================================================
+
+Purpose:
+Compare average player ratings across tournament stages.
+
+SQL Concepts:
+• JOIN
+• GROUP BY
+
+=========================================================
+*/
+
+SELECT
+    m.tournament_stage,
+    ROUND(AVG(pms.player_rating),2) AS avg_rating
+FROM matches m
+JOIN player_match_stats pms USING(match_id)
+GROUP BY
+    m.tournament_stage
+ORDER BY avg_rating DESC;
+
+/*
+=========================================================
+Question 20 : Best Defensive Teams
+=========================================================
+
+Purpose:
+Find teams with the highest average defensive contribution.
+
+SQL Concepts:
+• Aggregate Functions
+
+=========================================================
+*/
+
+SELECT
+    p.team,
+    ROUND(AVG(pms.defensive_contribution),2) AS avg_defense
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.team
+ORDER BY avg_defense DESC;
+
+/*
+=========================================================
+END OF FILE
+
+Advanced SQL concepts covered:
+
+• Common Table Expressions (CTEs)
+• Subqueries
+• Correlated Subqueries
+• Window Functions
+• Analytical SQL
+• Advanced Reporting
+
+Project:
+FIFA World Cup SQL Analytics
+
+=========================================================
+*/
+
