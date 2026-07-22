@@ -78,3 +78,78 @@ FIFA-World-Cup-SQL-Analytics
 │
 └── README.md
 ```
+
+## 🛠️ SQL Skills Demonstrated
+
+This project demonstrates proficiency in:
+
+- Database Design
+- Data Import using `LOAD DATA LOCAL INFILE`
+- Data Normalization
+- Primary & Foreign Keys
+- Constraints
+- Joins
+- Aggregate Functions
+- GROUP BY
+- HAVING
+- ORDER BY
+- CASE Statements
+- Views
+- Common Table Expressions (CTEs)
+- Window Functions
+- Ranking Functions
+- Subqueries
+- Data Analysis
+
+  ## 📊 Business Questions Solved
+
+The project answers 20 real-world business questions, including:
+
+- Top Goal Scorers
+- Highest Rated Players
+- Best Teams by Goals Scored
+- Teams with Best Pass Accuracy
+- Most Minutes Played
+- Players with Highest Goal Contributions
+- Best Defensive Players
+- Stadium Performance Analysis
+- Tournament Stage Analysis
+- Average Player Ratings by Team
+- And many more...
+
+  ## ⚡ Advanced SQL Concepts
+
+The project demonstrates advanced SQL features such as:
+
+- ROW_NUMBER()
+- RANK()
+- DENSE_RANK()
+- LAG()
+- LEAD()
+- NTILE()
+- Common Table Expressions (CTEs)
+- Views
+- Window Aggregations
+- Running Totals
+- Ranking Analysis
+
+  ## 📈 Project Statistics
+
+| Item | Count |
+|------|------:|
+| Raw Records | 54,600 |
+| Players | 1,248 |
+| Matches | 1,050 |
+| Player Match Statistics | 54,600 |
+| Tournament Summary | 1,248 |
+| Business Questions | 20 |
+| SQL Files | 8 |
+
+## 🧰 Tools Used
+
+- MySQL Server
+- MySQL Workbench
+- Visual Studio Code
+- Git
+- GitHub
+- Power BI
