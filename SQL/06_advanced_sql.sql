@@ -364,3 +364,190 @@ SELECT
     ) AS next_rating
 FROM player_match_stats;
 
+/*
+#########################################################
+        ADVANCED ANALYTICAL SQL
+#########################################################
+*/
+/*
+=========================================================
+Question 11 : Divide Players Into Performance Quartiles
+=========================================================
+
+Purpose:
+Divide players into four performance groups based on
+their average rating.
+
+SQL Concepts:
+• NTILE()
+
+=========================================================
+*/
+
+WITH player_ratings AS (
+    SELECT
+        p.player_name,
+        p.team,
+        ROUND(AVG(pms.player_rating),2) AS avg_rating
+    FROM players p
+    JOIN player_match_stats pms USING(player_id)
+    GROUP BY
+        p.player_id,
+        p.player_name,
+        p.team
+)
+SELECT
+    player_name,
+    team,
+    avg_rating,
+    NTILE(4) OVER(
+        ORDER BY avg_rating DESC
+    ) AS performance_group
+FROM player_ratings;
+
+/*
+=========================================================
+Question 12 : Running Total Of Goals
+=========================================================
+
+Purpose:
+Calculate cumulative goals scored by players.
+
+SQL Concepts:
+• SUM() OVER()
+
+=========================================================
+*/
+
+WITH goal_stats AS (
+    SELECT
+        p.player_name,
+        SUM(pms.goals) AS total_goals
+    FROM players p
+    JOIN player_match_stats pms USING(player_id)
+    GROUP BY
+        p.player_id,
+        p.player_name
+)
+SELECT
+    player_name,
+    total_goals,
+    SUM(total_goals) OVER(
+        ORDER BY total_goals DESC
+    ) AS running_total
+FROM goal_stats;
+
+/*
+=========================================================
+Question 13 : Running Average Player Rating
+=========================================================
+
+Purpose:
+Calculate the cumulative average rating of players.
+
+SQL Concepts:
+• AVG() OVER()
+
+=========================================================
+*/
+
+WITH ratings AS (
+    SELECT
+        p.player_name,
+        ROUND(AVG(pms.player_rating),2) AS avg_rating
+    FROM players p
+    JOIN player_match_stats pms USING(player_id)
+
+    GROUP BY
+        p.player_id,
+        p.player_name
+)
+SELECT
+    player_name,
+    avg_rating,
+    ROUND(
+        AVG(avg_rating) OVER(
+            ORDER BY avg_rating DESC
+        ),
+        2
+    ) AS running_average
+FROM ratings;
+
+/*
+=========================================================
+Question 14 : Percentage Rank Of Players
+=========================================================
+
+Purpose:
+Calculate each player's percentile rank based on
+average rating.
+
+SQL Concepts:
+• PERCENT_RANK()
+
+=========================================================
+*/
+
+WITH ratings AS (
+    SELECT
+        p.player_name,
+        p.team,
+        ROUND(AVG(pms.player_rating),2) AS avg_rating
+    FROM players p
+    JOIN player_match_stats pms USING(player_id)
+    GROUP BY
+        p.player_id,
+        p.player_name,
+        p.team
+)
+SELECT
+    player_name,
+    team,
+    avg_rating,
+    ROUND(
+        PERCENT_RANK() OVER(
+            ORDER BY avg_rating
+        ),
+        2
+    ) AS percentile_rank
+FROM ratings;
+
+/*
+=========================================================
+Question 15 : Cumulative Distribution Of Player Ratings
+=========================================================
+
+Purpose:
+Calculate cumulative distribution of players based on
+average rating.
+
+SQL Concepts:
+• CUME_DIST()
+
+=========================================================
+*/
+
+WITH ratings AS (
+    SELECT
+        p.player_name,
+        p.team,
+        ROUND(AVG(pms.player_rating),2) AS avg_rating
+    FROM players p
+    JOIN player_match_stats pms USING(player_id)
+    GROUP BY
+        p.player_id,
+        p.player_name,
+        p.team
+)
+SELECT
+    player_name,
+    team,
+    avg_rating,
+    ROUND(
+        CUME_DIST() OVER(
+            ORDER BY avg_rating
+        ),
+        2
+    ) AS cumulative_distribution
+FROM ratings;
+
