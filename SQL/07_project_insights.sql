@@ -238,7 +238,28 @@ SELECT
     (SELECT SUM(goals) FROM player_match_stats) AS total_goals,
     (SELECT ROUND(AVG(player_rating),2) FROM player_match_stats) AS average_player_rating;
 
+/*
+=========================================================
+END OF FILE
 
+Project Insights Generated:
+
+• Top Goal Scorers
+• Best Rated Players
+• Most Assists
+• Highest Pass Accuracy
+• Best Defensive Players
+• Goal Contribution Leaders
+• Strongest Teams
+• Most Disciplined Teams
+• Most Minutes Played
+• Tournament Summary
+
+Project:
+FIFA World Cup SQL Analytics
+
+=========================================================
+*/
 
 
 
