@@ -314,6 +314,159 @@ SELECT
 FROM players p
 JOIN player_match_stats pms USING(player_id);
 
+/*
+=========================================================
+Question 11 : Next Match Rating Using LEAD
+=========================================================
+
+Purpose:
+Display each player's next match rating.
+
+Business Value:
+Helps compare a player's current and future
+performance.
+
+=========================================================
+*/
+
+SELECT
+    p.player_name,
+    pms.match_id,
+    pms.player_rating,
+    LEAD(pms.player_rating)
+    OVER(
+        PARTITION BY p.player_id
+        ORDER BY pms.match_id
+    ) AS next_rating
+FROM players p
+JOIN player_match_stats pms USING(player_id);
+
+/*
+=========================================================
+Question 12 : Top 3 Players from Each Team
+=========================================================
+
+Purpose:
+Identify the top three highest-rated players from
+each team.
+
+Business Value:
+Useful for selecting a team's best performers.
+
+=========================================================
+*/
+
+WITH ranked_players AS (
+SELECT
+    p.team,
+    p.player_name,
+    ROUND(AVG(pms.player_rating),2) AS avg_rating,
+    ROW_NUMBER() OVER(
+        PARTITION BY p.team
+        ORDER BY AVG(pms.player_rating) DESC
+    ) AS rn
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name,
+    p.team
+)
+SELECT *
+FROM ranked_players
+WHERE rn <= 3
+ORDER BY team, rn;
+
+/*
+=========================================================
+Question 13 : Percent Rank of Players
+=========================================================
+
+Purpose:
+Calculate each player's percentile ranking based
+on average rating.
+
+Business Value:
+Shows where a player stands compared to others.
+
+=========================================================
+*/
+
+SELECT
+    p.player_name,
+    ROUND(AVG(pms.player_rating),2) AS avg_rating,
+    PERCENT_RANK()
+    OVER(
+        ORDER BY AVG(pms.player_rating)
+    ) AS percent_rank
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name;
+
+/*
+=========================================================
+Question 14 : Divide Players into Performance Groups
+=========================================================
+
+Purpose:
+Split players into four performance groups.
+
+Business Value:
+Useful for player segmentation.
+
+=========================================================
+*/
+
+SELECT
+    p.player_name,
+    ROUND(AVG(pms.player_rating),2) AS avg_rating,
+    NTILE(4)
+    OVER(
+        ORDER BY AVG(pms.player_rating) DESC
+    ) AS performance_group
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name;
+
+/*
+=========================================================
+Question 15 : Highest Rating in Every Team
+=========================================================
+
+Purpose:
+Display the highest player rating within each team.
+
+Business Value:
+Quickly identifies each team's benchmark
+performance.
+
+=========================================================
+*/
+
+SELECT
+    p.team,
+    p.player_name,
+    ROUND(AVG(pms.player_rating),2) AS avg_rating,
+    FIRST_VALUE(p.player_name)
+    OVER(
+        PARTITION BY p.team
+        ORDER BY AVG(pms.player_rating) DESC
+    ) AS best_player
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name,
+    p.team;
+
+
+
+
+
 
 
 
