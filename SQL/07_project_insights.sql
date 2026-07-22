@@ -152,6 +152,94 @@ GROUP BY team
 ORDER BY squad_value DESC
 LIMIT 1;
 
+/*
+=========================================================
+Insight 7 : Team with Highest Average Player Rating
+=========================================================
+
+Insight:
+Find the team with the highest average player rating.
+
+Business Value:
+Highlights the most consistently high-performing team.
+=========================================================
+*/
+
+SELECT
+    p.team,
+    ROUND(AVG(pms.player_rating), 2) AS avg_rating
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY p.team
+ORDER BY avg_rating DESC
+LIMIT 1;
+
+/*
+=========================================================
+Insight 8 : Stadium with Most Goals
+=========================================================
+
+Insight:
+Identify the stadium where the highest number of goals were scored.
+
+Business Value:
+Reveals the most entertaining venue during the tournament.
+=========================================================
+*/
+
+SELECT
+    stadium,
+    SUM(goals_team + goals_opponent) AS total_goals
+FROM matches
+GROUP BY stadium
+ORDER BY total_goals DESC
+LIMIT 1;
+
+/*
+=========================================================
+Insight 9 : Player with Most Minutes Played
+=========================================================
+
+Insight:
+Find the player who played the most minutes.
+
+Business Value:
+Highlights the tournament's most relied-upon player.
+=========================================================
+*/
+
+SELECT
+    p.player_name,
+    SUM(pms.minutes_played) AS total_minutes
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name
+ORDER BY total_minutes DESC
+LIMIT 1;
+
+/*
+=========================================================
+Insight 10 : Tournament Summary
+=========================================================
+
+Insight:
+Display the overall tournament statistics.
+
+Business Value:
+Provides a quick executive overview of the tournament.
+=========================================================
+*/
+
+SELECT
+    (SELECT COUNT(*) FROM players) AS total_players,
+    (SELECT COUNT(*) FROM matches) AS total_matches,
+    (SELECT SUM(goals) FROM player_match_stats) AS total_goals,
+    (SELECT ROUND(AVG(player_rating),2) FROM player_match_stats) AS average_player_rating;
+
+
+
 
 
 
