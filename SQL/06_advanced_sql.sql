@@ -182,4 +182,140 @@ HAVING SUM(goals) > (
 )
 ORDER BY total_goals DESC;
 
+/*
+=========================================================
+Question 6 : Rank Players by Total Goals
+=========================================================
+
+Purpose:
+Assign a rank to players based on the total goals scored.
+
+Business Value:
+Helps identify the tournament's top goal scorers.
+
+=========================================================
+*/
+
+SELECT
+    p.player_name,
+    SUM(pms.goals) AS total_goals,
+    RANK() OVER(ORDER BY SUM(pms.goals) DESC) AS player_rank
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name;
+
+/*
+=========================================================
+Question 7 : Dense Rank Players by Average Rating
+=========================================================
+
+Purpose:
+Assign a dense rank based on average player rating.
+
+Business Value:
+Ranks players without gaps when ratings are tied.
+
+=========================================================
+*/
+
+SELECT
+    p.player_name,
+    ROUND(AVG(pms.player_rating),2) AS avg_rating,
+    DENSE_RANK() OVER(
+        ORDER BY AVG(pms.player_rating) DESC
+    ) AS dense_rank
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name;
+
+/*
+=========================================================
+Question 8 : Row Number Within Each Team
+=========================================================
+
+Purpose:
+Assign a unique row number to players within each team.
+
+Business Value:
+Useful for selecting the top N players from each team.
+
+=========================================================
+*/
+
+SELECT
+    p.team,
+    p.player_name,
+    ROUND(AVG(pms.player_rating),2) AS avg_rating,
+    ROW_NUMBER() OVER(
+        PARTITION BY p.team
+        ORDER BY AVG(pms.player_rating) DESC
+    ) AS row_num
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name,
+    p.team;
+
+/*
+=========================================================
+Question 9 : Running Total of Goals
+=========================================================
+
+Purpose:
+Calculate the cumulative goals scored by players.
+
+Business Value:
+Shows how goal totals accumulate across ranked players.
+
+=========================================================
+*/
+
+SELECT
+    p.player_name,
+    SUM(pms.goals) AS total_goals,
+    SUM(SUM(pms.goals))
+    OVER(
+        ORDER BY SUM(pms.goals) DESC
+    ) AS running_total
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name;
+
+/*
+=========================================================
+Question 10 : Previous Match Rating
+=========================================================
+
+Purpose:
+Display each player's previous match rating.
+
+Business Value:
+Helps analyze performance trends across matches.
+
+=========================================================
+*/
+
+SELECT
+    p.player_name,
+    pms.match_id,
+    pms.player_rating,
+    LAG(pms.player_rating)
+    OVER(
+        PARTITION BY p.player_id
+        ORDER BY pms.match_id
+    ) AS previous_rating
+FROM players p
+JOIN player_match_stats pms USING(player_id);
+
+
+
+
+
 
