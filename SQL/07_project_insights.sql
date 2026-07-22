@@ -85,4 +85,73 @@ GROUP BY p.team
 ORDER BY total_goals DESC
 LIMIT 1;
 
+/*
+=========================================================
+Insight 4 : Best Defensive Team
+=========================================================
+
+Insight:
+Identify the team that conceded the fewest goals.
+
+Business Value:
+Shows which team had the strongest defensive performance.
+=========================================================
+*/
+
+SELECT
+    p.team,
+    SUM(pms.goals_conceded) AS goals_conceded
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY p.team
+ORDER BY goals_conceded ASC
+LIMIT 1;
+
+/*
+=========================================================
+Insight 5 : Most Creative Player
+=========================================================
+
+Insight:
+Find the player with the highest number of assists.
+
+Business Value:
+Identifies players who created the most scoring opportunities.
+=========================================================
+*/
+
+SELECT
+    p.player_name,
+    SUM(pms.assists) AS total_assists
+FROM players p
+JOIN player_match_stats pms USING(player_id)
+GROUP BY
+    p.player_id,
+    p.player_name
+ORDER BY total_assists DESC
+LIMIT 1;
+
+/*
+=========================================================
+Insight 6 : Most Valuable Team
+=========================================================
+
+Insight:
+Calculate the total market value of each team.
+
+Business Value:
+Shows which squad has the highest estimated player value.
+=========================================================
+*/
+
+SELECT
+    team,
+    SUM(market_value_eur) AS squad_value
+FROM players
+GROUP BY team
+ORDER BY squad_value DESC
+LIMIT 1;
+
+
+
 
