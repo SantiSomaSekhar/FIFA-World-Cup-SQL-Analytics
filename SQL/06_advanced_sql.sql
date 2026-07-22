@@ -199,3 +199,168 @@ WHERE total_goals >
     FROM team_goals
 )
 ORDER BY total_goals DESC;
+
+/*
+#########################################################
+        WINDOW FUNCTIONS
+#########################################################
+*/
+
+/*
+=========================================================
+Question 6 : Top 3 Highest Rated Players From Each Team
+=========================================================
+
+Purpose:
+Find the top 3 highest-rated players from every team.
+
+SQL Concepts:
+• ROW_NUMBER()
+• Window Functions
+
+=========================================================
+*/
+
+WITH player_ratings AS (
+    SELECT
+        p.team,
+        p.player_name,
+        ROUND(AVG(pms.player_rating),2) AS avg_rating,
+        ROW_NUMBER() OVER(
+            PARTITION BY p.team
+            ORDER BY AVG(pms.player_rating) DESC
+        ) AS ranking
+    FROM players p
+    JOIN player_match_stats pms USING(player_id)
+    GROUP BY
+        p.player_id,
+        p.player_name,
+        p.team
+)
+SELECT
+    team,
+    player_name,
+    avg_rating
+FROM player_ratings
+WHERE ranking <= 3
+ORDER BY team, avg_rating DESC;
+
+/*
+=========================================================
+Question 7 : Rank Players By Total Goals
+=========================================================
+
+Purpose:
+Assign rankings based on total goals scored.
+
+SQL Concepts:
+• RANK()
+• Window Functions
+
+=========================================================
+*/
+
+WITH goal_stats AS (
+    SELECT
+        p.player_name,
+        p.team,
+        SUM(pms.goals) AS total_goals
+    FROM players p
+    JOIN player_match_stats pms USING(player_id)
+    GROUP BY
+        p.player_id,
+        p.player_name,
+        p.team
+)
+SELECT
+    player_name,
+    team,
+    total_goals,
+    RANK() OVER(
+        ORDER BY total_goals DESC
+    ) AS player_rank
+FROM goal_stats;
+
+/*
+=========================================================
+Question 8 : Dense Ranking Based On Average Rating
+=========================================================
+
+Purpose:
+Assign dense ranks to players based on average rating.
+
+SQL Concepts:
+• DENSE_RANK()
+
+=========================================================
+*/
+
+WITH ratings AS (
+    SELECT
+        p.player_name,
+        p.team,
+        ROUND(AVG(pms.player_rating),2) AS avg_rating
+    FROM players p
+    JOIN player_match_stats pms USING(player_id)
+    GROUP BY
+        p.player_id,
+        p.player_name,
+        p.team
+)
+SELECT
+    player_name,
+    team,
+    avg_rating,
+    DENSE_RANK() OVER(
+        ORDER BY avg_rating DESC
+    ) AS rating_rank
+FROM ratings;
+
+/*
+=========================================================
+Question 9 : Compare Current Match Rating With Previous Match
+=========================================================
+
+Purpose:
+Compare each player's rating with their previous match.
+
+SQL Concepts:
+• LAG()
+
+=========================================================
+*/
+
+SELECT
+    player_id,
+    match_id,
+    player_rating,
+    LAG(player_rating) OVER(
+        PARTITION BY player_id
+        ORDER BY match_id
+    ) AS previous_rating
+FROM player_match_stats;
+
+/*
+=========================================================
+Question 10 : Compare Current Match Rating With Next Match
+=========================================================
+
+Purpose:
+Compare each player's current rating with the next match.
+
+SQL Concepts:
+• LEAD()
+
+=========================================================
+*/
+
+SELECT
+    player_id,
+    match_id,
+    player_rating,
+    LEAD(player_rating) OVER(
+        PARTITION BY player_id
+        ORDER BY match_id
+    ) AS next_rating
+FROM player_match_stats;
+
