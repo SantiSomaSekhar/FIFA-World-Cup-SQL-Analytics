@@ -10,181 +10,199 @@ An end-to-end SQL Data Analytics project that demonstrates data import, database
 
 ## 📖 Project Overview
 
-This project demonstrates a complete SQL data analysis workflow using a FIFA World Cup dataset.
+This project analyzes FIFA World Cup player and match data using **MySQL, SQL, and Power BI**.
 
-The project begins with importing raw CSV data into a staging table, followed by database normalization into multiple relational tables. Exploratory analysis, business-oriented SQL queries, advanced SQL concepts, reusable views, and project insights are then used to transform raw data into meaningful information.
+The project follows an end-to-end data analytics workflow, starting with data preparation and relational database design, followed by exploratory analysis, business-oriented SQL analysis, advanced SQL techniques, reusable SQL views, and an interactive Power BI dashboard.
+
+The main objective is to transform raw football data into meaningful analytical insights about **players, matches, teams, performance, goals, assists, ratings, and tournament stages**.
 
 The objective of this project is to demonstrate practical SQL skills that are commonly required for entry-level Data Analyst roles.
 
-## 🚀 Project Workflow
+## 🔄 Project Workflow
 
 ```text
- Raw CSV Dataset
-        │
-        ▼
-  Staging Table
-        │
-        ▼
-Database Normalization
-        │
-        ▼
-Exploratory Analysis
-        │
-        ▼
+Raw Dataset
+     ↓
+Data Import
+     ↓
+Data Cleaning & Normalization
+     ↓
+MySQL Database
+     ↓
+Exploratory SQL Analysis
+     ↓
 Business Questions
-        │
-        ▼
-  Advanced SQL
-        │
-        ▼
-      Views
-        │
-        ▼
-Project Insights
-        │
-        ▼
-Power BI Dashboard
+     ↓
+Advanced SQL Analysis
+     ↓
+SQL Views & Insights
+     ↓
+Power BI Data Model
+     ↓
+DAX Measures
+     ↓
+Interactive Dashboard
+     ↓
+Business Insights
 ```
 
 ## 🎯 Project Objectives
 
-- Import raw FIFA World Cup dataset into MySQL
-- Design a normalized relational database
-- Perform exploratory data analysis
-- Solve real-world business questions using SQL
-- Demonstrate advanced SQL concepts
-- Create reusable SQL Views
-- Generate actionable project insights
-- Build a Power BI dashboard for visualization
+- Build a structured and normalized relational database using MySQL.
+- Analyze player and match performance using SQL.
+- Perform exploratory data analysis.
+- Answer business-oriented analytical questions.
+- Apply advanced SQL concepts such as CTEs, subqueries, and window functions.
+- Create reusable SQL views for reporting.
+- Identify meaningful insights from the data.
+- Build an interactive Power BI dashboard.
+- Present the complete project as a professional data analytics portfolio project.
 
-  ## 📁 Project Structure
+## 🗂️ Dataset
 
-```text
-FIFA-World-Cup-SQL-Analytics
-│
-├── Dataset
-├── Documentation
-├── Images
-├── PowerBI
-├── SQL
-│   ├── 01_database_setup.sql
-│   ├── 02_data_import.sql
-│   ├── 03_data_normalization.sql
-│   ├── 04_exploratory_analysis.sql
-│   ├── 05_business_questions.sql
-│   ├── 06_advanced_sql.sql
-│   ├── 07_project_insights.sql
-│   └── 08_views.sql
-│
-└── README.md
-```
+The project uses a FIFA World Cup dataset containing player, match, team, and tournament performance information.
 
-## 🛠️ SQL Skills Demonstrated
+### Dataset Includes
 
-This project demonstrates proficiency in:
+- Player information
+- Player performance statistics
+- Match information
+- Team and opponent information
+- Tournament stages
+- Goals and assists
+- Player ratings
+- Passing and shooting statistics
+- Defensive statistics
+- Physical performance metrics
+- Tournament-level player summaries
 
-- Database Design
-- Data Import using `LOAD DATA LOCAL INFILE`
-- Data Normalization
-- Primary & Foreign Keys
-- Constraints
-- Joins
-- Aggregate Functions
-- GROUP BY
-- HAVING
-- ORDER BY
-- CASE Statements
-- Views
-- Common Table Expressions (CTEs)
-- Window Functions
-- Ranking Functions
-- Subqueries
-- Data Analysis
+### Dataset File
 
-  ## 📊 Business Questions Solved
+`Dataset/fifa_world_cup_2026_player_performance.csv`
 
-The project answers 20 real-world business questions, including:
+Additional information about the dataset is available in:
 
-- Top Goal Scorers
-- Highest Rated Players
-- Best Teams by Goals Scored
-- Teams with Best Pass Accuracy
-- Most Minutes Played
-- Players with Highest Goal Contributions
-- Best Defensive Players
-- Stadium Performance Analysis
-- Tournament Stage Analysis
-- Average Player Ratings by Team
-- And many more...
+`Dataset/dataset_info.md`
 
-  ## ⚡ Advanced SQL Concepts
+## 🛢️ Database Design
 
-The project demonstrates advanced SQL features such as:
+The raw FIFA World Cup data was organized into a normalized relational database using MySQL.
 
-- ROW_NUMBER()
-- RANK()
-- DENSE_RANK()
-- LAG()
-- LEAD()
-- NTILE()
-- Common Table Expressions (CTEs)
-- Views
-- Window Aggregations
-- Running Totals
-- Ranking Analysis
+### Main Tables
 
-  ## 📈 Project Statistics
+| Table                  | Description                                                 |
+| ---------------------- | ----------------------------------------------------------- |
+| `players`            | Stores player profile and basic information                 |
+| `matches`            | Stores match details, results, opponents, and goals         |
+| `player_match_stats` | Stores player performance statistics for individual matches |
+| `tournament_summary` | Stores tournament-level player performance summaries        |
 
-| Item | Count |
-|------|------:|
-| Raw Records | 54,600 |
-| Players | 1,248 |
-| Matches | 1,050 |
-| Player Match Statistics | 54,600 |
-| Tournament Summary | 1,248 |
-| Business Questions | 20 |
-| SQL Files | 8 |
+### Relationships
 
-## 🧰 Tools Used
+- `players` → `player_match_stats` : One-to-Many
+- `matches` → `player_match_stats` : One-to-Many
+- `players` → `tournament_summary` : One-to-One
 
-- MySQL Server
-- MySQL Workbench
-- Visual Studio Code
-- Git
-- GitHub
-- Power BI
+The database uses primary keys, foreign keys, and a unique player-match constraint to maintain data integrity.
 
-  ## 📊 Power BI Dashboard
+### ER Diagram
 
-The SQL dataset is connected to Power BI to create an interactive dashboard for visualization and reporting.
+![ER Diagram](Documentation/ER_diagram.png)
 
-The dashboard includes:
+## 🔍 SQL Analysis
 
-- KPI Cards
-- Team Performance
-- Top Goal Scorers
-- Player Ratings
-- Match Statistics
-- Tournament Analysis
-- Interactive Filters
+The SQL analysis is divided into multiple stages, covering exploratory analysis, business questions, advanced SQL techniques, project insights, and reusable SQL views.
 
-*(Dashboard screenshots will be added below.)*
+### SQL Scripts
 
-## 📸 Dashboard Preview
+| Script                          | Purpose                                        |
+| ------------------------------- | ---------------------------------------------- |
+| `01_database_setup.sql`       | Creates the database and relational tables     |
+| `02_data_import.sql`          | Imports the dataset into MySQL                 |
+| `03_data_normalization.sql`   | Organizes and normalizes the imported data     |
+| `04_exploratory_analysis.sql` | Performs exploratory data analysis             |
+| `05_business_questions.sql`   | Answers business-oriented analytical questions |
+| `06_advanced_sql.sql`         | Demonstrates advanced SQL techniques           |
+| `07_project_insights.sql`     | Generates analytical insights from the data    |
+| `08_views.sql`                | Creates reusable SQL views for reporting       |
 
-Coming Soon...
+## 📊 Power BI Dashboard
 
-## 🚀 Future Improvements
+The project includes a **3-page interactive Power BI dashboard** designed to analyze player performance, match performance, and overall tournament statistics.
 
-- Add more advanced SQL optimization techniques.
-- Expand Power BI dashboard with additional visuals.
-- Include stored procedures and triggers.
-- Automate data refresh using scheduled imports.
-- Deploy the project using cloud databases.
+### Dashboard Pages
 
-  ## 👨‍💻 Author
+**1. Overview**
 
-** Santennagari Soma Sekhar **
+- Key performance indicators
+- Player and position filters
+- Goals and assists analysis
+- Player ratings
+- Performance by position
+
+**2. Player Analysis**
+
+- Top goal scorers
+- Top player ratings
+- Goals vs assists
+- Average rating by position
+- Player and position filters
+
+**3. Match & Team Analysis**
+
+- Total matches
+- Total teams
+- Total goals
+- Total goals conceded
+- Goals scored vs goals conceded
+- Matches by tournament stage
+- Match results
+- Tournament stage, team, and stadium filters
+
+## 🖼️ Dashboard Preview
+
+### Overview
+
+![Power BI Overview](Images/PowerBI_Overview.png)
+
+### Player Analysis
+
+![Power BI Player Analysis](Images/PowerBI_Player_Analysis.png)
+
+### Match & Team Analysis
+
+![Power BI Match & Team Analysis](Images/PowerBI_Match_team_Analysis.png)
+
+## 📈 Key Metrics
+
+| Metric                | Value |
+| --------------------- | ----: |
+| Total Players         | 1,248 |
+| Total Matches         | 1,050 |
+| Total Teams           |    48 |
+| Average Player Rating |  7.61 |
+| Total Goals           |   ~3K |
+| Total Goals Conceded  |   ~3K |
+
+> Note: Some large values are displayed using Power BI's abbreviated number format.
+
+## 🛠️ Tools & Technologies
+
+| Technology             | Purpose                                                  |
+| ---------------------- | -------------------------------------------------------- |
+| **MySQL**        | Database creation, management, and data storage          |
+| **SQL**          | Data analysis, business questions, and advanced querying |
+| **Power BI**     | Interactive dashboards and data visualization            |
+| **DAX**          | Analytical measures in Power BI                          |
+| **Git & GitHub** | Version control and project portfolio management         |
+
+## 👤 Author
+
+**Santi Soma Sekhar**
+
+Data Analytics Portfolio Project
+
+**Tools:** MySQL | SQL | Power BI | DAX | Git & GitHub
 
 Aspiring Data Analyst passionate about SQL, Power BI, Excel, and Python.
 
@@ -192,4 +210,3 @@ GitHub:
 https://github.com/SantiSomaSekhar
 
 ## ⭐ If you found this project useful, consider giving it a star.
-
